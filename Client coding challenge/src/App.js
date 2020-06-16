@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import Movie from './Movie';
 import MovieForm from './MovieForm';
-import { stringify } from 'querystring';
 
 class App extends React.Component {
 
@@ -10,12 +9,15 @@ class App extends React.Component {
     super( props );
     this.state = {
       movies : [],
-      fetchMovies : this.handleInput
+      fetchMovies : this.handleInput,
+      fetchGet : this.handleFetch,
+      urlPost : 'http://localhost:8080/api/add-movie/',
+      urlGet : 'http://localhost:8080/api/movies/'
     }
   }
   
   handleInput = () => {
-    let url = 'http://localhost:8080/api/add-movie/';
+    let url = `${this.state.urlPost}`;
     let title = document.getElementById('title').value;
     let rating = document.getElementById('rating').value;
     let year = document.getElementById('year').value;
@@ -39,7 +41,7 @@ class App extends React.Component {
       })
       .then( responseJSON => {
         console.log( responseJSON );
-        {this.handleFetch}
+        this.handleFetch();
       })
       .catch( err => {
         console.log( "An error ocurred in the database." );
@@ -47,7 +49,7 @@ class App extends React.Component {
   }
 
   handleFetch = () => {
-    let url = 'http://localhost:8080/api/movies/';
+    let url = `${this.state.urlGet}`;
 
     let settings = {
       method : 'GET'
@@ -70,7 +72,7 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    {this.handleFetch}
+    this.handleFetch();
   }
 
   render(){
@@ -79,7 +81,9 @@ class App extends React.Component {
           <MovieForm onclickEvent={this.state.fetchMovies}></MovieForm>
           <div className="movies-container">
             {this.state.movies.map( (movie, index) => {
-              <Movie movieInfo={movie} idx={index}></Movie>
+              return(
+                <Movie movieInfo={movie} idx={index}></Movie>
+              )
             })}
           </div>
       </div>
