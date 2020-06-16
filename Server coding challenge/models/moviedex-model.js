@@ -18,12 +18,14 @@ let movieSchema = mongoose.Schema({
     }
 })
 
-let moviesCollection = new mongoose.Connection( 'movies', movieSchema );
+let moviesCollection = new mongoose.Collection( 'movies', movieSchema );
+
+//
 
 const Movies = {
-    addNewMovie: function( movie ) {
+    addNewMovie: ( movie ) => {
         return moviesCollection
-                .create( movie )
+                .insertOne( movie )
                 .then( response => {
                     return response;
                 })
